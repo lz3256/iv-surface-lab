@@ -1,0 +1,3 @@
+-r requirements-calendar.txt
+wrds>=3.2
+pyarrow>=14

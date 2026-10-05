@@ -1,0 +1,12 @@
+{
+  "synthetic": false,
+  "surface_kind": "curve",
+  "availability_basis": "assumed",
+  "reference_instrument": "FILL_IN",
+  "execution_instrument": "FILL_IN",
+  "price_basis": "FILL_IN: unadjusted, roll treatment, distributions",
+  "iv_level_definition": "50-delta call IV proxy, decimal, 30/91 calendar days",
+  "execution_price_time_basis": "FILL_IN: actual price timestamp and source",
+  "calendar_source": "FILL_IN: authoritative exchange schedule",
+  "availability_evidence": "FILL_IN: vendor delivery timestamp or explicit assumption; assumed is not verified"
+}

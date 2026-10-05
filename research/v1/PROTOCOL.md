@@ -1,0 +1,21 @@
+# Existing-data exploratory run
+
+This protocol is fixed before viewing model results. Raw-data quality and date coverage have already been inspected. This is not independently certified preregistration.
+
+- Inputs: optionsDX SPX EOD 2010–2023; user-exported CRSP SPY, PERMNO 84398, 2009-12-31–2024-01-02.
+- Signal grid: all 3,522 XNYS sessions, 2010-01-04–2023-12-29. Keep missing option dates as missing values. Exclude the 12 non-XNYS dates.
+- Development: through 2022-12-28. Final temporal holdout: 2022-12-29–2023-12-29, 252 sessions. Unknown future outcomes at each period's tail are unscored. Do not tune after development results before reporting holdout.
+- Curve: vendor IV, signed vendor Delta and vendor DTE. No inferred AM/PM or OPRA mapping. Use 7–200 DTE, IV 0.0001–3, bid > 0, ask >= bid, relative spread <= 50%. Interpolate IV in Delta within each expiry; median IV for equal rounded Delta values. Interpolate total variance in maturity, without extrapolation or cross-date imputation. Main nodes: call 50Δ at 30/91 days, put/call 25Δ at 30 days. Put 50Δ at 30/91 days is diagnostic only.
+- Prices: SPY close is the reference for past-return controls, replacing the earlier proposal's SPX close because an independently complete SPX close series was not supplied. Execution and variance proxy also use SPY. This change is fixed before model results.
+- Availability scenario: prior signal-date option file received by next regular session 08:00 New York, signal at 08:01, hypothetical entry at that day's official SPY opening price. This is an assumed scenario, not an authenticated delivery schedule, and is not guaranteed conservative. SPY OHLC/RET/RETX known at session close + 5 minutes. No use of entry-day prices or dividends as predictors.
+- Returns: opening-to-opening 1/5/21 sessions, dividends earned strictly after entry through exit included. Future variance: 5/21 sessions, daily Garman–Klass plus dividend-adjusted overnight squared returns, annualized. No realized high-frequency variance claim.
+- Models: existing v3.2 engine. Ridge alpha 10; HAR minimum 252 samples; main minimum 504; rolling latest 1,008 valid, already-known labels; refit every 21 rows. Use all original model comparisons, no feature search.
+- Designated main question: H2 one-session return, R3_skew_change versus R2_HAR. H1 volatility and other horizons are auxiliary. Existing within-run Holm adjustments retained; all results remain exploratory. Development and holdout are reported separately, not selected by significance.
+- Uncertainty: 1,000 paired circular-block bootstrap resamples, block length max(20, horizon). This is conditional on generated forecasts, without refitting each bootstrap. No causal/private-information inference.
+- Strategy diagnostics: existing equal-weight staggered sleeves with baseline one-way 1 bp turnover cost and built-in 0/2/5/10 bp scenarios. No financing, borrow, tax or market-impact model. Strategy returns are hypothetical diagnostics.
+- Scope: one fixed development run and one fixed final run. No GEX or event module because supporting position/event inputs are absent. No extra parameter variants or retrospective sample-start selection.
+- Known limitation: settlement family, vendor Greeks construction, historical availability and revisions remain unverified. Results are vendor-tenor approximations, not a validated OptionMetrics replication or executable trading claim.
+
+## Data-quality amendment before any model results
+
+After constructing node values, six May 2019 dates showed call/put 50-delta IV gaps of approximately 0.42–0.48 at 91 days and 0.28–0.36 at 30 days. This was not visible in the earlier support-only audit. Before running any predictive models, add an extreme consistency screen: if the absolute call/put 50-delta IV difference at either 30 or 91 days exceeds 0.20 (20 volatility points), mask all four main curve nodes on that date. Keep the date, original node values, diagnostic put nodes and exclusion list. Do not assume equal-strike parity or discard all negative skew. This is a data-driven quality rule identified before prediction results, not independently preregistered confirmation. Other parameters and the holdout split are unchanged. The original protocol hash remains in protocol_freeze.json; the amended pre-results hash is recorded separately.
