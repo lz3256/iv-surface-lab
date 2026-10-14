@@ -1,0 +1,82 @@
+{
+  "frozen_at_utc": "2026-10-13T21:33:41.355330+00:00",
+  "status": "limited fixed literature-guided exploration on already viewed history; no independent confirmation",
+  "primary_horizons": [
+    5,
+    21
+  ],
+  "secondary_horizons": [
+    1,
+    22
+  ],
+  "models": {
+    "V1_HAR": "HAR",
+    "V2_IV": "HAR + ATM IV"
+  },
+  "legacy_methods": [
+    "direct_exp",
+    "training_smearing",
+    "rolling_multiplier",
+    "shrunk_multiplier",
+    "positive_calibration",
+    "shrunk_positive_calibration",
+    "qlike_training"
+  ],
+  "new_methods": [
+    "recent_direct",
+    "recent_variance_correction",
+    "window_average",
+    "level_nnls_calibration",
+    "fixed_blend"
+  ],
+  "recent_estimation": {
+    "half_life_calendar_sessions": 252,
+    "window": 1008,
+    "min_train": 504,
+    "refit": 21,
+    "alpha": 10,
+    "weights": "2**(-(latest_train_session-train_session)/252), normalized to sum=train_n",
+    "standardization": "weighted training mean and variance only",
+    "variance_conversion": "exp(log_prediction+0.5*weighted_training_residual_variance)",
+    "assumption": "local conditional-normal approximation; no guarantee of unbiasedness"
+  },
+  "window_average": {
+    "windows": [
+      252,
+      504,
+      1008
+    ],
+    "weights": [
+      0.3333333333333333,
+      0.3333333333333333,
+      0.3333333333333333
+    ],
+    "combination": "arithmetic mean of positive direct-exp forecasts",
+    "startup": "common original 504-observation minimum historical pool; individual windows truncate available pool"
+  },
+  "level_calibration": {
+    "window": 252,
+    "method": "nonnegative least squares y=a+b*f in variance levels, a>=0,b>=0; analytic global optimum",
+    "history": "latest252 strictly matured originally issued baseline forecasts; no hyperparameter search",
+    "difference_from_paper": "positive constrained adaptation of recursive MZ, not the unrestricted OLS implementation"
+  },
+  "fixed_blend": ".5*original_direct_exp + .5*recent_variance_correction; no learned weights",
+  "timing_sensitivity": {
+    "shift": "all IV/surface information delayed one additional calendar trading session, no fill",
+    "design": "lag0 and lag1 models share the intersection-complete training pool, same ridge fits/targets/refit dates",
+    "comparisons": "IV increment under lag0, IV increment under lag1, lag1 vs lag0 IV forecast",
+    "inference": "separate6-test family per phase/block for horizons5/21",
+    "interpretation": "feature-staleness sensitivity; not proof of actual T+1 vendor delivery"
+  },
+  "label_maturity": "target_end strictly < asof_time and earlier-origin forecast for all calibrations/training",
+  "primary_sample": "identical original completion common samples; fail if any new method silently drops rows",
+  "secondary_sample": "original final-period rows only; all7 methods share matured-calibration eligibility; descriptive, no significance selection",
+  "primary_inference": "5000 paired calendar circular-block draws, blocks21/42, seeded; cumulative116 comparisons per phase/block includes previous66 and50 new; Holm correction",
+  "mz": "HAC21/42, joint Holm across48 primary tests per phase/lag; secondary estimates descriptive only",
+  "secondary_regimes": "same fixed lagged VIX<20,20-30,>=30; point estimates only",
+  "validation": "original forecast replay, future-label perturbations, weighted fit matrix identity, NNLS recovery/SciPy comparison, independent production history reconstruction",
+  "no_tuning": "do not tune weights/half-life/windows or replace failed methods after results",
+  "data_status": "raw epoch/date/tenor consistency checked; actual receipt and AM/PM family remain unverified",
+  "new_data_status": "local inputs through2023; vendor current public product lists2010-2023; new-period confirmation unavailable here",
+  "literature_relation": "simplified fixed adaptations; not exact replications or guaranteed corrections"
+}

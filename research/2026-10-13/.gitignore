@@ -1,0 +1,8 @@
+data/
+private-inputs/
+work/
+*forecasts.csv
+*predictions*
+*input_hashes*
+__pycache__/
+protocol.json

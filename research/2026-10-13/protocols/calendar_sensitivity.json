@@ -1,0 +1,12 @@
+{
+  "frozen_at_utc": "2026-10-13T21:52:16.755554+00:00",
+  "reason": "data audit found5 Sunday expiry dates in2019; separately specified before inspecting exclusion performance",
+  "screen": "exclude every expiry node with weekday Saturday/Sunday; no guessed replacement date or symbol",
+  "status": "conservative data-definition sensitivity, not verified metadata correction",
+  "surface": "same delta nodes and total-variance tenor interpolation; same .20 call/put consistency screen",
+  "base_models": "original log-HAR and log-HAR+IV, same504/1008/21/alpha10; no calibration variants",
+  "scores": "original eligible paired scoring dates restricted to both panels; preserve calendar gaps",
+  "comparisons": "panel difference for2models x2horizons x2metrics=8; IV increment for2panels x2horizons x2metrics=8",
+  "inference": "5000 paired calendar bootstrap,21/42 blocks,seed2026101306,Holm16 comparisons per phase/block",
+  "limitations": "separate exploratory QC question; not an unseen period or proof of actual AM/PM identity"
+}

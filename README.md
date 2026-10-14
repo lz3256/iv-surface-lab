@@ -2,29 +2,19 @@
 
 # IV Surface Lab
 
-**Separate volatility forecasting from return prediction — and audit every time boundary.**
+**Implied-variance information, forecast calibration, and the limits of cross-horizon corrections.**
 
 A reproducible research engine for implied-volatility surfaces, HAR benchmarks, skew changes, variance-risk-premium proxies, rolling forecasts and cost diagnostics. The repository also preserves the research protocols and aggregate findings from exploratory SPX-options / SPY experiments.
 
-## Work completed
+## Latest research: October 13, 2026
 
-The implementation covers a shared surface/price/calendar pipeline, interpolation and node-quality checks, and rolling return/variance forecasts against HAR and price-history benchmarks. Real-data development and holdout comparisons document weak return-prediction evidence. Later residualized-skew and same-expiry extensions explicitly disclose reuse of the original sample.
+**[Implied Volatility Information in Variance Forecasting](research/2026-10-13/README.md)** studies 15.6M SPX option records over 2010–2023 and SPY Garman–Klass variance proxies augmented with squared overnight returns.
 
-## Research highlights
+- Adding 30-day implied variance reduced original holdout log-variance MSE by **24.3% / 35.6% at 5 / 21 trading sessions**; five-session MSE was lower in all 11 development calendar years.
+- Lower losses coexisted with horizon-dependent level bias. Exploratory shrunk recursive calibration narrowed five-session mean bias from **−10.2% to +0.8%**, but worsened 21-session calibration.
+- A one-session IV delay retained a **23.2% 21-session QLIKE advantage over HAR** (32.3% without delay). Excluding weekend-expiry nodes barely changed headline MSE improvements.
 
-- A shared data schema for surface nodes, prices, calendars and events.
-- Training restricted to labels known at each forecast time.
-- HAR and nested return/variance models, block bootstrap and multiple-comparison reporting.
-- Surface-node quality checks, fixed-tenor interpolation audits and dividend-aware labels.
-- Later exploratory extensions for residualized skew and same-expiry endpoint changes.
-
-## What the recorded research found
-
-The initial real-data experiment did not find stable incremental SPY return-prediction value from changes in 30-day 25-delta skew. The specified one-day comparison improved holdout MSE by only 0.087%, with p=0.590.
-
-IV levels showed useful variance-forecasting information relative to HAR in those experiments, but stronger significance claims depend on the multiple-comparison family. Forecasting volatility must not be presented as forecasting market direction.
-
-The later v3 work reuses the 2010–2023 sample. Its former holdout is no longer an untouched test set, and the v3 findings are exploratory.
+The update includes method code, data-independent checks, historical protocols, and aggregate comparison tables. Later calibration work reuses the historical sample; it does not supply a fresh holdout or establish trading alpha. The original skew-return research and its weak return-prediction evidence remain in the archive below.
 
 ## Run a synthetic demo
 
@@ -46,6 +36,8 @@ python -m unittest discover -s tests -v
 ```
 
 ## Research archive
+
+- [October 2026 calibration and robustness update](research/2026-10-13/README.md)
 
 - [Initial empirical results](research/v1/研究结果.md)
 - [Initial data audit](research/v1/数据核验.md)

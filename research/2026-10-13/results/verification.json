@@ -1,0 +1,39 @@
+{
+  "checked_on": "2026-10-13",
+  "relative_mean_bias_definition": "100 * (mean(forecast) / mean(variance_proxy) - 1); negative means mean underforecasting, not mean relative error across individual dates",
+  "annual_checks": {
+    "calibration_common": {
+      "years": 10,
+      "years_with_lower_iv_mse": 10,
+      "n": 2383
+    },
+    "original": {
+      "years": 11,
+      "years_with_lower_iv_mse": 11,
+      "n": 2639
+    },
+    "weekend_excluded_native": {
+      "years": 11,
+      "years_with_lower_iv_mse": 11,
+      "n": 2639
+    }
+  },
+  "2012_is_partial_development_year": true,
+  "calibration_best_criterion": "smallest absolute final-holdout mean bias, not proven overall forecast winner",
+  "bias_best_5d_method": "shrunk_positive_calibration",
+  "bias_best_5d_pct": 0.847242,
+  "same_method_21d_bias_pct": 29.195069,
+  "lowest_observed_5d_qlike_method": "recent_variance_correction",
+  "lowest_observed_5d_qlike": 0.080716,
+  "expiry_gain_pct_original": [
+    24.271017,
+    35.580931
+  ],
+  "expiry_gain_pct_weekend_excluded": [
+    24.266334,
+    35.610562
+  ],
+  "timing_scope": "robustness to one-session stale inputs; does not verify point-in-time vendor delivery or revisions",
+  "date_basis": "User-supplied original Aug 2026 start; calibration and audit continued to Oct 13, project remains ongoing",
+  "full_qr_preview_changed": false
+}

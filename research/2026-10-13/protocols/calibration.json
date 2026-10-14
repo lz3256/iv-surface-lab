@@ -1,0 +1,95 @@
+{
+  "frozen_at_utc": "2026-10-13T21:11:32.577060+00:00",
+  "status": "remaining two planned exploratory experiments on previously viewed historical data",
+  "horizons": [
+    5,
+    21
+  ],
+  "models": {
+    "V1_HAR": "HAR",
+    "V2_IV": "HAR + ATM IV"
+  },
+  "methods": [
+    "direct_exp",
+    "training_smearing",
+    "rolling_multiplier",
+    "shrunk_multiplier",
+    "positive_calibration",
+    "shrunk_positive_calibration",
+    "qlike_training"
+  ],
+  "two_parameter_calibration": {
+    "forecast": "exp(log(f) + d + g*z), z=(log(f)-historical_mean)/historical_std; equivalent exp(a+b*log(f))",
+    "constraint": "b=1+g/std >=0; positive forecast and monotonic response to original forecast",
+    "objective": "sum(QLIKE) + alpha/2*(d^2+g^2), alpha=10; identity at d=g=0",
+    "window": 252,
+    "minimum_matured_forecasts": 252,
+    "alpha": 10.0,
+    "updates": "every forecast origin; original issued log forecasts; same mature-history qualification as scalar experiment",
+    "sensitivity": "fixed half log correction, exp(log(f)+0.5*(d+g*z)); no second parameter fit",
+    "label_eligibility": "historical origin < current origin and target_end strictly < current asof_time",
+    "phase_boundary": "continuous history; recovered boundary targets enter only after maturity; not added to development scoring"
+  },
+  "qlike_training": {
+    "forecast": "exp(intercept + standardized original log-HAR / log-HAR+IV features)",
+    "objective": "sum(QLIKE) + alpha/2*sum(slope^2); intercept unpenalized; alpha=10 fixed",
+    "information_structure": "same original features and union-complete sample across V0/V1/V2/V3; no new features",
+    "min_train": 504,
+    "window": 1008,
+    "refit_calendar_sessions": 21,
+    "alpha": 10.0,
+    "standardization": "within each strictly matured training sample only",
+    "initialization": "original log-target ridge solution; deterministic",
+    "no_smearing": true,
+    "literature_relation": "loss-coherent positive-link extension using original log features; not a literal replication of level-linear qlikeHAR",
+    "regularization_note": "same fixed numerical ridge alpha but losses have different curvature; not an exactly matched effective-complexity comparison"
+  },
+  "optimizer": {
+    "method": "analytic gradient/Hessian damped projected Newton; convex log-link QLIKE objective",
+    "max_iterations": 150,
+    "mean_objective_projected_gradient_tolerance": 1e-07,
+    "armijo": 0.0001,
+    "max_backtracks": 60,
+    "failure_policy": "stop and document numerical problem, never silently omit forecasts or switch methods by outcome"
+  },
+  "sample": "all 2 models x 7 methods share scoring rows; compare coverage to prior scalar experiment",
+  "primary_metric": "normalized variance-level QLIKE",
+  "secondary_metrics": [
+    "variance-level MSE",
+    "relative mean bias",
+    "MZ alpha/beta",
+    "new forecast log-MSE (not substituted for old log-MSE)"
+  ],
+  "regimes": "existing lagged VIX <20,20-30,>=30; descriptive only",
+  "loss_family": "66 prespecified paired comparisons per phase/block: inherited scalar 28, new methods vs direct/smearing 24, two-parameter vs corresponding scalar 8, new-method IV increment 6",
+  "paired_inference": {
+    "reps": 5000,
+    "seed": 2026101304,
+    "blocks": [
+      21,
+      42
+    ],
+    "multiplicity": "Holm across the full 66 comparison family per phase/block, including older methods",
+    "calendar_gaps_preserved": true,
+    "refit_inside_bootstrap": false,
+    "interpretation": "descriptive centered circular-block bootstrap conditional on issued forecasts"
+  },
+  "mz_inference": "HAC lag21/42; Holm across 28 joint alpha=0,beta=1 tests per phase/lag; marginal intervals unadjusted",
+  "no_selection": "no tuning of alpha, windows, shrinkage, regimes or method using results; all variants reported",
+  "independent_validation": "finite-difference derivatives, known-model recovery, future-label perturbations, SciPy optimizer cross-checks on fixed synthetic and production samples",
+  "limitations": [
+    "already viewed historical data; new untouched data needed for independent confirmation",
+    "OHLC/overnight variance proxy, not latent conditional variance",
+    "overlapping horizons reduce independent information",
+    "base-data vendor timestamps and settlement-family issues remain unresolved"
+  ],
+  "literature": {
+    "coherent_forecasting": "https://onlinelibrary.wiley.com/doi/full/10.1002/for.70114",
+    "retransformation": "https://www.sciencedirect.com/science/article/pii/S0169207019302390"
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3"
+  }
+}
